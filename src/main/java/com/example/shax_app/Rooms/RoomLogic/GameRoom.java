@@ -19,7 +19,7 @@ public class GameRoom {
         String existing = tokenOf(playerId);
         if (existing != null) return existing;
 
-        if (p1 == null) { p1 = new Player(playerId); startIfReady(); return "P1"; }
+        if (p1 == null) { p1 = new Player(playerId, true); startIfReady(); return "P1"; }
         if (p2 == null) { p2 = new Player(playerId); startIfReady(); return "P2"; }
         return null;
     }

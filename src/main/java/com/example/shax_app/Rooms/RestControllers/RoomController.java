@@ -2,7 +2,7 @@ package com.example.shax_app.Rooms.RestControllers;
 
 
 
-import com.example.shax_app.Rooms.DTO.CreateRoomDTO;
+import com.example.shax_app.Rooms.DTO.RoomInfoDTO;
 import com.example.shax_app.Rooms.DTO.GameStateDTO;
 import com.example.shax_app.Rooms.RoomLogic.GameRoom;
 import com.example.shax_app.Rooms.Services.RoomManager;
@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -85,7 +83,7 @@ public class RoomController {
 
         //i need to still open the websocket
 
-        return ResponseEntity.ok().body(new CreateRoomDTO(newRoomId, playerId));
+        return ResponseEntity.ok().body(new RoomInfoDTO(newRoomId, playerId));
 
 
     }
@@ -132,6 +130,34 @@ public class RoomController {
             return ResponseEntity.ok().body(state);
 
         }
+    }
+
+    @PostMapping("/api/v1/rooms/{roomId}/join")
+    @ResponseBody
+    public ResponseEntity<?> joinRoom(@PathVariable String roomId){
+
+
+        GameRoom room = roomManager.get(roomId);
+
+        if (room == null){
+            return ResponseEntity.badRequest().body("ROOM_NOT_FOUND");
+        }
+
+        String playerId = UUID.randomUUID().toString();
+
+        String player = room.addPlayer(playerId);
+
+        if (player == null){
+            return ResponseEntity.badRequest().body("ROOM_FULL");
+        }
+
+        log.info("player with ID: " + playerId + " has joined the room: " + roomId);
+
+        return ResponseEntity.ok().body(new RoomInfoDTO(roomId, playerId));
+
+
+
+
     }
 
 

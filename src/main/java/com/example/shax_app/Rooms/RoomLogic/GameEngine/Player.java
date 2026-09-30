@@ -9,7 +9,8 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public Player(String player, boolean isPlayer1){
+    public Player(String playerId, boolean isPlayer1){
+        this.playerId = playerId;
         this.isPlayer1 = isPlayer1;
     }
 

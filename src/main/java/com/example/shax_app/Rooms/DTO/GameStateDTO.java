@@ -24,9 +24,7 @@ public record GameStateDTO(
         for (int i = 0; i < 24; i++){
             String spotNumber = String.valueOf(i);
             String spot = null;
-            if (game.getBoard().getSpot(spotNumber).getOccupiedBy() == null){
-                continue;
-            } else {
+            if (game.getBoard().getSpot(spotNumber).getOccupiedBy() != null){
                 spot = game.getBoard().getSpot(spotNumber).getOccupiedBy().getPlayerName();
             }
 
