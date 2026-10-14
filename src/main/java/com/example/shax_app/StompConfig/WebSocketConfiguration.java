@@ -1,6 +1,7 @@
 package com.example.shax_app.StompConfig;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -11,13 +12,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
+
+    @Value("${app.allowed-origins}")
+    private String[] allowedOrigins;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // /portfolio is the HTTP URL for the endpoint to which a WebSocket (or SockJS)
         // client needs to connect for the WebSocket handshake
-        registry.addEndpoint("/ws").setAllowedOrigins("*");
-        //later switch to my actual frontend domain instead of *
+        registry.addEndpoint("/ws").setAllowedOriginPatterns(allowedOrigins);
     }
+        //later switch to my actual frontend domain instead of *
+
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
